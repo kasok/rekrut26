@@ -21,10 +21,12 @@ class ProductEntityListener
     $event)
     {
         //file_put_contents('bbb',print_r($product,true),FILE_APPEND);
-        $this->logger->info('Utworzono nowy produkt', [
+        $this->logger->error('Utworzono nowy produkt', [
             'product_id' => $product->getId(),
             'product_name' => $product->getName(),
         ]);
+        file_put_contents('logs/'.date('Ymd-H').'.log',$product->getId().'->'.$product->getName(),FILE_APPEND);
+
         //echo('dupka');exit();
     }
 
