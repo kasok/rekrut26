@@ -1,7 +1,7 @@
 # Kodano zadanie rekrutacyjne
 
 Podstawowa struktura powstała w oparciu o pakiet symfony-docker polecany w oficjalnej
-dokumentacji Smfony (https://github.com/dunglas/symfony-docker)
+dokumentacji Symfony (https://github.com/dunglas/symfony-docker)
 
 ## Przygotowanie
 
