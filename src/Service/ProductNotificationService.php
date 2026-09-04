@@ -21,12 +21,12 @@ class ProductNotificationService
         $this->sendEmail($product, $operation);
         
         // @TODO: to be implemented
-        // $this->sendSms($product);
-        // $this->sendSlack($product);
+        // $this->sendSms($product, $operation);
+        // $this->sendSlack($product, $operation);
     }
 
 
-    private function sendEmail(Product $product): void
+    private function sendEmail(Product $product, string $operation): void
     {
         $email = (new Email())
             ->from('mailer@kodano.pl')
