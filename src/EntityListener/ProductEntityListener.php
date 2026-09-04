@@ -4,6 +4,7 @@ namespace App\EntityListener;
 
 use App\Entity\Product;
 use Psr\Log\LoggerInterface;
+use App\Service\ProductNotificationService;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Events;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
@@ -13,26 +14,42 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
 class ProductEntityListener
 {
     public function __construct(
-        private LoggerInterface $logger
+        private LoggerInterface $logger,
+        private ProductNotificationService $notificationService
     ) {
     }
 
     public function postPersist(Product $product, LifecycleEventArgs
     $event)
     {
-        //file_put_contents('bbb',print_r($product,true),FILE_APPEND);
-        $this->logger->error('Utworzono nowy produkt', [
-            'product_id' => $product->getId(),
-            'product_name' => $product->getName(),
-        ]);
-        file_put_contents('logs/'.date('Ymd-H').'.log',$product->getId().'->'.$product->getName(),FILE_APPEND);
+        
+        $this->logger->info(
+            'New product created: '.$product->getId().' => '.$product->getName() 
+        ); //u mnie nie działa i nie wiem dlaczego
 
-        //echo('dupka');exit();
+        file_put_contents(
+            'logs/'.date('Ymd-H').'.log',
+            date('Y-m-d H:i:s').' New product created: '.$product->getId().' => '.$product->getName()."\n\n",
+            FILE_APPEND
+        ); //...dlatego loguję po staremu
+
+        $this->notificationService->sendCreationNotifications($product,'created');
+
+        
     }
 
-    public function postUpdate(Conference $conference, LifecycleEventArgs $event)
+    public function postUpdate(Product $product, LifecycleEventArgs $event)
     {
-        file_put_contents('ccc','ccc');
-        //echo('pipka');exit();
+        $this->logger->info(
+            'Product updated: '.$product->getId().' => '.$product->getName() 
+        ); //u mnie nie działa i nie wiem dlaczego
+
+        file_put_contents(
+            'logs/'.date('Ymd-H').'.log',
+            date('Y-m-d H:i:s').' Product updated: '.$product->getId().' => '.$product->getName()."\n\n",
+            FILE_APPEND
+        ); //...dlatego loguję po staremu
+
+        $this->notificationService->sendCreationNotifications($product,'updated');
     }
 }
